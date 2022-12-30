@@ -1,0 +1,289 @@
+---
+title: "STAT 4410/8416 Homework 1"
+author: "Lefebvre Nelson"
+date: "Due on Sep 15, 2022"
+output:
+  html_document: default
+  pdf_document: default
+  word_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, fig.align='center')
+```
+
+<h4>1. Based on your reading assignments answer the following questions:</h4>
+    <h4>a) What is data science?  </h4> 
+    - Getting information from any sources and it's the art of transforming them. (For exemple to get information to demonstrate an idea)
+    
+<h4>    b) Explain with an example what you mean by data product.  </h4>
+    - For exemple we can use the color that we saw in class, they are all build with RGB code. We can use them to creat the same color as we expect and creat graphical product for exemple.But it also can be all the car bought in 2021 and for how much (like Kelley Blue Book website).
+
+<h4>    c) Carefully read Cleveland's paper shown in lecture 2 and discuss what he suggested about the field of statistics and data science. </h4>
+    -He suggest that the statistic domain can be elarge with the studying of data analysis. This technical work can be extend directly or indirectly to statistics.
+
+<h4>    d) Explain in a short paragraph how data science is different from computer science.</h4>
+    -Computer science are more focus on the software/hardware and data science are more on using different tools Database/Math processing tools to display data.
+
+<h4>    e) What is data literacy? Is it important to be data literate in this modern world? Explain why or why not.  </h4>
+    - The data literacy is the way of understanding and minupulating data to resolve real world problem or at least find possible solutions or paths. It's an incredibly powerful tool in our society because information is power. With information we can plan/resolve problems.(This is also why they are present in almost all companies)
+    
+<h4>    f) In his article, Donoho talked about the Common Task Framework. Explain what it is and why he mentioned it.  </h4>
+    - The common task framework represent 3 things :
+    <ul>
+    <li>A public data containing  some informations like measurments, learning data, class prediction rule for training data etc.. </li>
+    <li>Competitor who trying to create rules from training data. </li>
+    <li>A scoring referee to make the training data more efficient. For exemple prediction data.</li> </ul>
+    
+<h4>    g) According to Donoho, what are the activities of greater data science?  
+    - For Donoho the activities of greater data science are : </h4><ul> 
+    <li>Data Exploration and Preparation </li>
+    <li>Data Representation and Transformation</li>
+    <li>Computing with Data </li>
+    <li>Data Modeling</li>
+    <li>Data Visualization and Presentation</li>
+    <li>Science about Data Science</li>
+    </ul>
+
+    
+<h4>2. What are the very first few steps one should take once data is loaded onto **R**? Demonstrate them by loading tips data from http://www.ggobi.org/book/data/tips.csv.</h4>
+
+```{r}
+data <- read.table("http://www.ggobi.org/book/data/tips.csv",header=T, sep=",")
+
+head(data)
+```
+
+<h4>3. In our **R** class, we learned about recursive functions that produce a sequence of numbers up to a given number, say $n$, as demonstrated with the following code:</h4>
+```{r}
+foo <- function(x) {
+  print(x)
+  if(x > 1) {
+    foo(x - 1)
+  }
+}
+
+moo <- function(x) {
+  if(x > 1) {
+    moo(x - 1)
+  }
+  print(x)
+}
+
+foo(3)
+moo(3)
+```  
+<h4>|         Explain why ``moo()`` prints 1 through 3 while ``foo()`` prints from 3 to 1.</h4>
+We use recursive recursive fonction for both, the difference is for foo we call the fonction after the print so it's basicly doing this:
+print()->call fonction and -1 on x -> print() ->call fonction and -1 on x...
+So 3,2,1
+But for moo we print after the call of the fonction.
+So 1,2,3
+
+<h4>4. The function `sqrt()` provides the square root of a non-negative number. Note what happens when you try `sqrt(-1)`. We want to create our own function that either finds the square root of a non-negative number or provides a custom message if we pass it a negative number.  
+    a) Create a new `R` function `getRootNotVectorized()` that will return the square root of any non-negative number and 'not possible' for a negative number. Further, `getRootNotVectorized()` should **only** successfully return 'not possible' if the negative value is the first element that you pass to the function. Otherwise, your function should return `NaN` for negative values. Demonstrate that your function produces the following outputs:  
+    \    
+    `getRootNotVectorized(4) = 2`  
+    `getRootNotVectorized(-4) = "not possible"`  
+    `getRootNotVectorized(c(-1, -4)) = "not possible"`  
+    `getRootNotVectorized(c(0, 1, -1, 4, -4)) = 0 1 NaN 2 NaN`.  
+    \   
+    Don't worry about the warning messages that accompany vector inputs with more than one element for now.    </h4>
+    
+```{r}
+getRootNotVectorized <- function(x) {
+  if(length(x)>1){
+    y<-(ifelse(x>0,sqrt(x),NaN))
+    if(all(is.nan(y))==TRUE){
+      return("Not possible")
+    }
+    else{return(y)}
+  }
+  if(length(x)<=1){
+    return(ifelse(x>0,sqrt(x),"Not possible"))
+  }
+  
+}
+
+getRootNotVectorized(4)
+getRootNotVectorized(-4)
+getRootNotVectorized(c(-1, -4))
+getRootNotVectorized(c(0, 1, -1, 4, -4))
+
+```
+    
+    
+    
+<h4>    b) Now create a second function `getRootVectorized()` that will return the square root of any non-negative number and 'not possible' for a negative number **regardless** of the number's position in a numeric vector of arbitrary length. Demonstrate that your function produces the following outputs:   
+    \   
+    `getRootVectorized(4) = 2`  
+    `getRootVectorized(-4) = "not possible"`  
+    `getRootVectorized(c(-1, -4)) = "not possible" "not possible"`  
+    `getRootVectorized(c(0, 1, -1, 4, -4)) = "0" "1" "not possible" "2" "not possible"`.    
+    \  </h4>
+    
+```{r}
+getRootNotVectorized <- function(x) {
+  return(ifelse(x>0,sqrt(x),"Not possible"))
+}
+
+getRootNotVectorized(4)
+getRootNotVectorized(-4)
+getRootNotVectorized(c(-1, -4))
+getRootNotVectorized(c(0, 1, -1, 4, -4))
+```
+    
+<h4>    c) Describe the differences in your code between `getRootNotVectorized()` and `getRootVectorized()` that allowed you to get the desired message output for any negative element of a vector in the latter function but not the former. Knowing whether or not functions that you use will handle vectors in the way that you expect will be very important as you continue working with `R`.</h4>  
+    
+The difference is the conversion of the numeric valor in vector.
+    
+<h4>    d) Why do you see a difference between the output of the two following lines of code?  </h4>
+```{r, eval=FALSE}
+is.numeric(getRootVectorized(c(0, 1, 4)))
+
+is.numeric(getRootVectorized(c(0, 1, -4)))
+```
+Because the vector is composed with -4 so it's consider as a character instead of numeric.
+
+<h4>5. This problem will give you some practice with creating and manipulating vectors.
+    a) Using `seq()`, create a vector consisting of an arithmetic sequence of integers from 5 to 50 with a common difference of 5 stored in a variable called `mySeq`. **Report** `mySeq`.</h4>
+    
+```{r}
+myseq <- seq(5,50,5)
+print(myseq)
+```
+    
+<h4>    b) Describe how the different arguments in each of the three following commands changes the output of `rep()`: `rep(mySeq, 5)`, `rep(mySeq, each = 5)`, and `rep(mySeq, mySeq)`.  </h4>
+    
+```{r}
+myseq <- seq(5,50,5)
+print(rep(myseq, 5))
+print(rep(myseq, each = 5))
+print(rep(myseq, myseq))
+```    
+As we can see for the first one it's repeating the first argument x time the second argument(here 5, like myseq1,myseq2... x5).
+For the 2nd one it's repeating the argument of the first argment 5 times then the 2nd one 5 times etc..
+For the 3rd one it's repeating each argument from the first argument x time of the number in the 2nd argument (so here is repeating 5 5times, 10 10 times etc..).
+
+  
+<h4>    c) Concatenate the sequence `1:14` to the end of the vector described by `rep(mySeq,mySeq)` and store
+the resulting vector in the same `mySeq` variable. **Report** the length of `mySeq`.  </h4>
+```{r}
+myseq <- seq(1:14)
+myseq <- rep(myseq,myseq)
+print(length(myseq))
+```
+
+<h4>    d) Create a square matrix populated row-wise from your `mySeq` vector and store it in a variable called `sqMtrx`. **Report** the vector of values described by the column sums of `sqMtrx`</h4>
+    
+```{r}
+myseq <- seq(1:14)
+sqMtrx <- (myseq)^2
+print(sum(ncol(sqMtrx)))
+```
+
+
+<h4>6. Write a program that will do the following. Include your codes and necessary outputs to demonstrate your work.  
+    a) Generate 350,000 random numbers from a gamma distribution with `shape = 2` and `scale = 3` and store these numbers in a vector called `myVector`. **Report** a histogram of the numbers you just generated.  </h4>
+    
+```{r}
+myVector <- rgamma(350000, shape=2, scale=3)
+hist(myVector)
+```    
+    
+<h4>    b) Convert `myVector` into a matrix with 5,000 rows and assign it to an object called `myMatrix`. **Report** the dimensions of `myMatrix`.</h4>  
+ 
+```{r}
+
+myMatrix <- matrix(myVector, nrow=5000)
+
+```
+
+<h4>    c) Compute the row means of `myMatrix` and **report** a histogram of those row means.</h4>  
+
+```{r}
+
+hist(rowMeans(myMatrix))
+
+```   
+    
+<h4>    d) Explain why the two histograms you created in (6a) and (6c) have different shapes. </h4>
+    Because the first one is the data with the random generated valor and the 2nd one is the mean of the row of the generated valor.
+    
+    
+<h4>7. Perform the following reproducible procedure:  
+    a) Set a seed for the `R` random number generator using `set.seed()` and seed value 2019. </h4> 
+    
+```{r}
+
+set.seed(2019)
+
+```       
+    
+<h4>    b) Create a vector called `x` of 1,000 values from a normal distribution with mean 100 and standard deviation 20. **Report** the `summary()` of `x`.</h4>
+    
+```{r}
+
+x <- rnorm(1000,100,20)
+summary(x)
+
+```    
+    
+<h4>    c) Create a second vector called `y` of 1,000 values from a normal distribution with mean 0 and standard deviation 4. **Report** the `summary()` of `y`.  </h4>
+    
+```{r}
+
+y <- rnorm(1000,0,4)
+summary(y)
+
+```      
+    
+<h4>    g) Create a data frame called `df` from your `x` and `y` vectors.</h4>
+    
+```{r}
+
+df <- data.frame(x,y)
+
+```    
+    
+<h4>    h) Generate a scatterplot of `df`.  </h4>
+    
+```{r}
+
+plot(df)
+
+```    
+    
+<h4>    i) **Report** the `tail()` of `df` as a nice table using `kable()`.</h4>
+    
+```{r}
+
+knitr::kable(tail(df))
+
+```    
+    
+    
+<h4>8. Based on our lecture notes, answer the following questions. Show your answer presenting the relavent `R` code.
+
+    a) We have a vector of values `x = c(2,4,5, "3.5")`. What would be the mode of the vector `x`? </h4> 
+
+The value of the vector should be character, because 2,4,5 can be "translated" to character. (And if we do a pyramid character will be upper numerical, because a numeric can be character).   
+    
+<h4>    b) How do you load a package into `R`? Show that loading `ggplot2` package.
+
+We can load a package into R with the method library("name"). With ggplot2 it will be:</h4>
+```{r}
+library("ggplot2")
+
+```    
+    
+<h4>    c) Missing values are shown as `NA` in `R`. How can you check if there is any missing values in a vector `y = c(3,5,8, NA, 6)`? </h4>
+    
+I can use is.na(), it will return False for the value who are not NA and for the one who are Na it will return True. *Or any(is.na(To know directly if the is one who is Na or not)) if there is one it will return TRUE.
+    
+```{r}
+is.na(c(3,5,8, NA, 6))
+any(is.na(c(3,5,8, NA, 6)))
+
+``` 
+    
